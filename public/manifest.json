@@ -1,0 +1,14 @@
+{
+  "name": "Diables Rouges — Billetterie officielle",
+  "short_name": "Diables Rouges",
+  "description": "Achetez vos tickets pour les matchs des Diables Rouges. Paiement Mobile Money, QR code à l'entrée du stade.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#c1272d",
+  "icons": [
+    { "src": "Image.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "Image.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}
