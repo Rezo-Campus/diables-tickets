@@ -15,6 +15,10 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompetitionsRouteImport } from './routes/competitions'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminMatchesRouteImport } from './routes/admin/matches'
+import { Route as AdminCompetitionsRouteImport } from './routes/admin/competitions'
 
 const ScanRoute = ScanRouteImport.update({
   id: '/scan',
@@ -46,6 +50,26 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminMatchesRoute = AdminMatchesRouteImport.update({
+  id: '/admin/matches',
+  path: '/admin/matches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCompetitionsRoute = AdminCompetitionsRouteImport.update({
+  id: '/admin/competitions',
+  path: '/admin/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +78,10 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/mes-tickets': typeof MesTicketsRoute
   '/scan': typeof ScanRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
+  '/admin/matches': typeof AdminMatchesRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +90,10 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/mes-tickets': typeof MesTicketsRoute
   '/scan': typeof ScanRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
+  '/admin/matches': typeof AdminMatchesRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +103,10 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/mes-tickets': typeof MesTicketsRoute
   '/scan': typeof ScanRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
+  '/admin/matches': typeof AdminMatchesRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,8 +117,22 @@ export interface FileRouteTypes {
     | '/contact'
     | '/mes-tickets'
     | '/scan'
+    | '/admin/competitions'
+    | '/admin/matches'
+    | '/admin/users'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/competitions' | '/contact' | '/mes-tickets' | '/scan'
+  to:
+    | '/'
+    | '/auth'
+    | '/competitions'
+    | '/contact'
+    | '/mes-tickets'
+    | '/scan'
+    | '/admin/competitions'
+    | '/admin/matches'
+    | '/admin/users'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -91,6 +141,10 @@ export interface FileRouteTypes {
     | '/contact'
     | '/mes-tickets'
     | '/scan'
+    | '/admin/competitions'
+    | '/admin/matches'
+    | '/admin/users'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,6 +154,10 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   MesTicketsRoute: typeof MesTicketsRoute
   ScanRoute: typeof ScanRoute
+  AdminCompetitionsRoute: typeof AdminCompetitionsRoute
+  AdminMatchesRoute: typeof AdminMatchesRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -146,6 +204,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/matches': {
+      id: '/admin/matches'
+      path: '/admin/matches'
+      fullPath: '/admin/matches'
+      preLoaderRoute: typeof AdminMatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/competitions': {
+      id: '/admin/competitions'
+      path: '/admin/competitions'
+      fullPath: '/admin/competitions'
+      preLoaderRoute: typeof AdminCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -156,7 +242,21 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   MesTicketsRoute: MesTicketsRoute,
   ScanRoute: ScanRoute,
+  AdminCompetitionsRoute: AdminCompetitionsRoute,
+  AdminMatchesRoute: AdminMatchesRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

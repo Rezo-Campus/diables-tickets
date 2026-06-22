@@ -13,7 +13,7 @@ export const Route = createFileRoute("/scan")({
 type Result = { ok: boolean; message: string; match?: string } | null;
 
 function ScanPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, canScan, rolesLoading } = useAuth();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scannerRef = useRef<any>(null);
@@ -22,8 +22,8 @@ function ScanPage() {
   const lastScan = useRef<string>("");
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth" });
-  }, [loading, user, navigate]);
+    if (!loading && !rolesLoading && !canScan) navigate({ to: "/auth" });
+  }, [loading, rolesLoading, canScan, navigate]);
 
   async function start() {
     setResult(null);
@@ -60,7 +60,7 @@ function ScanPage() {
   }
 
   async function validate(code: string) {
-    const { data, error } = await supabase.rpc("validate_ticket", { p_code: code });
+    const { data, error } = await supabase.rpc("validate_ticket_secure", { p_code: code });
     if (error) {
       setResult({ ok: false, message: error.message });
       return;
@@ -81,7 +81,7 @@ function ScanPage() {
 
   useEffect(() => () => { stop(); }, []);
 
-  if (loading || !user)
+  if (loading || rolesLoading || !user || !canScan)
     return (
       <div className="flex justify-center py-32">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Trophy, Calendar, MapPin, Loader2, Ticket } from "lucide-react";
 import { toast } from "sonner";
+import { TeamSide } from "@/components/TeamSide";
 
 export const Route = createFileRoute("/competitions")({
   head: () => ({
@@ -170,9 +171,18 @@ function MatchRow({ match, onBought }: { match: Match; onBought: () => void }) {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-muted/30 p-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <div className="font-bold">
-          {match.is_home ? "Diables Rouges" : match.opponent} <span className="text-muted-foreground">vs</span>{" "}
-          {match.is_home ? match.opponent : "Diables Rouges"}
+        <div className="flex items-center gap-2 font-bold">
+          <TeamSide
+            showHomeTeam={match.is_home}
+            opponent={match.opponent}
+            opponentCountryCode={match.opponent_country_code}
+          />
+          <span className="text-muted-foreground">vs</span>
+          <TeamSide
+            showHomeTeam={!match.is_home}
+            opponent={match.opponent}
+            opponentCountryCode={match.opponent_country_code}
+          />
         </div>
         <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">

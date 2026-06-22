@@ -23,6 +23,7 @@ export type Match = {
   ticket_price: number;
   tickets_available: number;
   is_home: boolean;
+  opponent_country_code: string | null;
 };
 
 export type Ticket = {
@@ -35,3 +36,5 @@ export type Ticket = {
   payment_method: string | null;
   created_at: string;
 };
+
+export type AppRole = "commercial" | "admin";
